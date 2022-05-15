@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>E0809: Първа паралаксна графика</title>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<script src="three.min.js"></script>
+		<script src="StereoEffect.js"></script>
+		<script src="vax.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			// инициализираме в режим на паралаксна графика
+			vaxInitParallax( );
+
+			// слушаме за събитието на ориентацията на устройство
+			window.addEventListener( "deviceorientation", deviceOrientation, true);
+
+			// функция, която показва данните на ориентацията
+			function deviceOrientation( event )
+			{
+				let alpha =  event.alpha.toFixed(1) / 180 * Math.PI;
+				let beta = event.beta.toFixed(1) / 180 * Math.PI;
+				let gamma = event.gamma.toFixed(1) / 180 * Math.PI;
+				let abs = event.absolute;
+				camera.rotation.set(beta,alpha,0);
+				console.log(alpha, beta, gamma, abs);
+			}
+			
+			let background = new THREE.CubeTextureLoader()
+				.setPath( 'textures/' )
+				.load( [
+					'posx.png',
+					'negx.png',
+					'posy.png',
+					'negy.png',
+					'posz.png',
+					'negz.png'
+				] );
+				background.mapping = THREE.CubeRefractionMapping;
+
+				scene.background = background
+
+			let newLight = new THREE.AmbientLight({ intensity: 1.0 });
+			scene.add(newLight);
+
+			const geometry = new THREE.DodecahedronGeometry( 10, 0 );
+			const material = new THREE.MeshPhongMaterial( { color: 0xffffff, envMap: background, refractionRatio: 0.98} );
+			const group = new THREE.Group();
+			camera.position.set(0,0,0);
+
+			for(let i=0; i < 10; i++) {
+				const cube = new THREE.Mesh( geometry, material );
+				cube.position.set((Math.random()-0.5) * 500, (Math.random()-0.5) * 500, (Math.random()-0.5) * 500);
+				group.add( cube );
+			}
+			scene.add(group)
+			
+			function animate( t )
+			{
+				group.children.forEach((child) => {
+					child.rotation.y = t / 2;
+				})
+				
+			}
+
+		</script>
+	</body>
+</html>
+
+
