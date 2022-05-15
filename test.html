@@ -29,12 +29,12 @@
 				let gamma = event.gamma.toFixed(1) / 180 * Math.PI;
 				let abs = event.absolute;
 
-				if((lastAlpha - alpha) >= Math.PI / 2) {
+				if((lastGamma - gamma) >= Math.PI / 2) {
 					alpha += Math.PI;
 					beta += Math.PI;
 					gamma += Math.PI;
 				}
-				lastAlpha = alpha;
+				lastGamma = gamma;
 
 				camera.rotation.order = 'YXZ';
 				camera.rotation.set(-gamma, -alpha, -beta );
