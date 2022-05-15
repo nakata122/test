@@ -29,15 +29,18 @@
 				let gamma = event.gamma.toFixed(1) / 180 * Math.PI;
 				let abs = event.absolute;
 
-				if(Math.abs(lastGamma - gamma) >= Math.PI / 2) {
-					alpha -= Math.PI;
-					beta -= Math.PI;
-					gamma -= Math.PI;
+				camera.rotation.order = 'YXZ';
+				console.log(camera.rotation)
+				if(Math.abs(lastGamma - gamma) <= Math.PI / 2) {
+					camera.rotation.set(camera.rotation.x + lastGamma - gamma, 
+										camera.rotation.y + lastAlpha - alpha, 
+										camera.rotation.z + lastBeta - beta);
 				}
+				lastAlpha = alpha;
+				lastBeta = beta;
 				lastGamma = gamma;
 
-				camera.rotation.order = 'YXZ';
-				camera.rotation.set(-gamma, -alpha, -beta );
+				// camera.rotation.set(-gamma, -alpha, -beta );
 				// camera.updateProjectionMatrix();
 				// console.log(camera)
 				console.log(alpha, beta, gamma, abs);
