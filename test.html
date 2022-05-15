@@ -28,11 +28,17 @@
 				let gamma = event.gamma.toFixed(1) / 180 * Math.PI;
 				let abs = event.absolute;
 
+				if(alpha > Math.PI) {
+					alpha += Math.PI;
+					beta += Math.PI;
+					gamma += Math.PI;
+				}
+
 				camera.rotation.order = 'YXZ';
 				camera.rotation.set(-gamma, -alpha, -beta );
 				// camera.updateProjectionMatrix();
 				// console.log(camera)
-				// console.log(alpha, beta, gamma, abs);
+				console.log(alpha, beta, gamma, abs);
 			}
 			
 			let background = new THREE.CubeTextureLoader()
