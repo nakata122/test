@@ -21,6 +21,7 @@
 			window.addEventListener( "deviceorientation", deviceOrientation, true);
 
 			// функция, която показва данните на ориентацията
+			let lastAlpha = 0, lastBeta = 0, lastGamma = 0;
 			function deviceOrientation( event )
 			{
 				let alpha =  event.alpha.toFixed(1) / 180 * Math.PI;
@@ -28,11 +29,12 @@
 				let gamma = event.gamma.toFixed(1) / 180 * Math.PI;
 				let abs = event.absolute;
 
-				if(alpha > Math.PI) {
+				if((lastAlpha - alpha) >= Math.PI / 2) {
 					alpha += Math.PI;
 					beta += Math.PI;
 					gamma += Math.PI;
 				}
+				lastAlpha = alpha;
 
 				camera.rotation.order = 'YXZ';
 				camera.rotation.set(-gamma, -alpha, -beta );
