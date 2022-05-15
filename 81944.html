@@ -15,7 +15,7 @@
 	<body>
 		<script>
 			// инициализираме в режим на паралаксна графика
-			vaxInitParallax(3);
+			vaxInitParallax( );
 
 			// слушаме за събитието на ориентацията на устройство
 			window.addEventListener( "deviceorientation", deviceOrientation, true);
@@ -29,7 +29,7 @@
 				let gamma = event.gamma.toFixed(1) / 180 * Math.PI;
 				let abs = event.absolute;
 
-				if(Math.abs(lastGamma - gamma) >= Math.PI / 2) {
+				if((lastGamma - gamma) >= Math.PI / 2) {
 					alpha += Math.PI;
 					beta += Math.PI;
 					gamma += Math.PI;
