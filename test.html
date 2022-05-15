@@ -23,16 +23,16 @@
 			// функция, която показва данните на ориентацията
 			function deviceOrientation( event )
 			{
-				let alpha = event.alpha.toFixed(1) / 180 * Math.PI;
+				let alpha =  event.alpha.toFixed(1) / 180 * Math.PI;
 				let beta = event.beta.toFixed(1) / 180 * Math.PI;
 				let gamma = event.gamma.toFixed(1) / 180 * Math.PI;
 				let abs = event.absolute;
-				
-  				const euler = new THREE.Euler();
-				  
-    			euler.set(beta, alpha, -gamma, 'YXZ');
-				camera.rotation = euler;
-				console.log(alpha, beta, gamma, abs);
+
+				camera.rotation.order = 'YXZ';
+				camera.rotation.set(gamma, alpha, beta );
+				camera.updateProjectionMatrix();
+				console.log(camera)
+				// console.log(alpha, beta, gamma, abs);
 			}
 			
 			let background = new THREE.CubeTextureLoader()
@@ -47,7 +47,7 @@
 				] );
 				background.mapping = THREE.CubeRefractionMapping;
 
-				scene.background = background
+			scene.background = background;
 
 			let newLight = new THREE.AmbientLight({ intensity: 1.0 });
 			scene.add(newLight);
