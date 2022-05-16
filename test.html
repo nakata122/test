@@ -33,7 +33,7 @@
 				// console.log(camera.rotation)
 				if(Math.abs(lastGamma - gamma) <= Math.PI / 4 && Math.abs(lastAlpha - alpha) <= Math.PI / 4 && Math.abs(lastBeta - beta) <= Math.PI / 4) {
 					camera.rotation.set(camera.rotation.x + (lastGamma - gamma), 
-										camera.rotation.y + (lastAlpha - alpha), 
+										camera.rotation.y - (lastAlpha - alpha), 
 										camera.rotation.z + (lastBeta - beta));
 				}
 				lastAlpha = alpha;
