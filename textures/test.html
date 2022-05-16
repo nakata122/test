@@ -2,7 +2,7 @@
 
 <html>
 	<head>
-		<title>Homework 3</title>
+		<title>E0809: Първа паралаксна графика</title>
 		<meta charset="utf-8">
 		
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
@@ -31,7 +31,7 @@
 
 				camera.rotation.order = 'YXZ';
 				// console.log(camera.rotation)
-				if(Math.abs(lastGamma - gamma) <= Math.PI / 4 && Math.abs(lastAlpha - alpha) <= Math.PI / 4 && Math.abs(lastBeta - beta) <= Math.PI / 4) {
+				if(Math.abs(lastGamma - gamma) <= Math.PI / 2) {
 					camera.rotation.set(camera.rotation.x + (lastGamma - gamma), 
 										camera.rotation.y + (lastAlpha - alpha), 
 										camera.rotation.z + (lastBeta - beta));
@@ -42,37 +42,43 @@
 
 				console.log(alpha, beta, gamma, abs);
 			}
+			
+			let background = new THREE.CubeTextureLoader()
+				.setPath( 'textures/' )
+				.load( [
+					'posx.png',
+					'negx.png',
+					'posy.png',
+					'negy.png',
+					'posz.png',
+					'negz.png'
+				] );
+				background.mapping = THREE.CubeRefractionMapping;
 
-			let newLight = new THREE.AmbientLight();
-			newLight.intensity = 0.2
+			scene.background = background;
+
+			let newLight = new THREE.AmbientLight({ intensity: 1.0 });
 			scene.add(newLight);
 
-			const cubeGeo = new THREE.BoxGeometry(200,200,200, 8,8,8);
-			const mat = new THREE.MeshStandardMaterial({color: 'green', side: THREE.BackSide});
-			const cube = new THREE.Mesh(cubeGeo, mat);
-			scene.add(cube);
-			
-			const matWireframe = new THREE.MeshStandardMaterial({color: 'white', side: THREE.BackSide, wireframe: true});
-			const innerCube = new THREE.Mesh(cubeGeo, matWireframe);
-			innerCube.scale.set(0.99,0.99,0.99);
-			scene.add(innerCube);
-
-			const geometry = new THREE.ConeGeometry( 5, 20, 32 );
+			const geometry = new THREE.DodecahedronGeometry( 10, 0 );
+			const material = new THREE.MeshPhongMaterial( { color: 0xffffff, envMap: background, refractionRatio: 0.98} );
+			const group = new THREE.Group();
 			camera.position.set(0,0,0);
 
-			for(let i=0; i < 1000; i++) {
-				const material = new THREE.MeshStandardMaterial( {color: 'hsl(' + Math.floor(Math.random() * 360) + ', 100%, 50%)'} );
-				const cone = new THREE.Mesh( geometry, material );
-				let x = (Math.random()-0.5) * 200;
-				let y = (Math.random()-0.5) * 200;
-				let z = (Math.random()-0.5) * 200;
-				if(Math.random() < 0.3) cone.position.set(Math.random() > 0.5 ? -100:100, y, z);
-				else if(Math.random() < 0.3) cone.position.set(x, y, Math.random() > 0.5 ? -100:100);
-				// else cone.position.set(x, Math.random() > 0.5 ? -100:100, z);
-
-				scene.add( cone );
+			for(let i=0; i < 10; i++) {
+				const cube = new THREE.Mesh( geometry, material );
+				cube.position.set((Math.random()-0.5) * 500, (Math.random()-0.5) * 500, (Math.random()-0.5) * 500);
+				group.add( cube );
 			}
+			scene.add(group)
 			
+			function animate( t )
+			{
+				group.children.forEach((child) => {
+					child.rotation.y = t / 2;
+				})
+				
+			}
 
 		</script>
 	</body>
